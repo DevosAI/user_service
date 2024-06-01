@@ -1,10 +1,12 @@
 package com.devos.user_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="user",schema = "public")
+@Table(name="users",schema = "public")
 public class User implements UserDetails {
 
     @Id
@@ -38,6 +40,18 @@ public class User implements UserDetails {
 
     private Date updatedAt;
 
+
+    @ManyToMany
+    @JsonIgnoreProperties("roles")
+    private List<Role> roles = new ArrayList<>();
+
+//    public List<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(List<Role> roles) {
+//        this.roles = roles;
+//    }
 
     public Integer getId() {
         return id;

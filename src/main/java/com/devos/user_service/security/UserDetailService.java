@@ -33,9 +33,6 @@ public class UserDetailService  implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("loadUserByUsername");
         UserDetails user = userDao.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not Found"));
-//        User usert = userDao.findByUsername(user.getUsername()).get();
-//        usert.setPwd(securityConfig.passwordEncoder().encode("0000"));
-//        userDao.save(usert);
         logger.info("loadUserByUsername {}",user);
         return user;
     }
