@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name="roles",schema = "public")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     private String roleName;
