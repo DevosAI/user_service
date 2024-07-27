@@ -2,6 +2,7 @@ package com.devos.user_service.security;
 
 
 import com.devos.user_service.dao.UserDao;
+import com.devos.user_service.model.Permission;
 import com.devos.user_service.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -30,9 +33,12 @@ public class UserDetailService  implements UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("loadUserByUsername");
-        UserDetails user = userDao.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not Found"));
+        User user = userDao.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not Found"));
+        Collection<Permission> authorities = (Collection<Permission>) user.getAuthorities();
+        System.out.println(authorities);
         logger.info("loadUserByUsername {}",user);
         return user;
     }

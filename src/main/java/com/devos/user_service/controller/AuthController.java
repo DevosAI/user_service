@@ -3,10 +3,10 @@ package com.devos.user_service.controller;
 import com.devos.user_service.dao.UserDao;
 import com.devos.user_service.dto.LoginRequest;
 import com.devos.user_service.dto.LoginResponse;
+import com.devos.user_service.model.Permission;
 import com.devos.user_service.model.User;
 import com.devos.user_service.security.AuthTokenFilter;
 import com.devos.user_service.security.JWTUtils;
-import com.devos.user_service.security.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/auth")
 public class AuthController {
 
-    @Autowired
+    @Autowired		
     private JWTUtils jwtUtils;
 
     private  static  final Logger logger= LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -38,6 +37,7 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManger;
+    
     @Autowired
     private UserDao userDao;
 
@@ -59,15 +59,24 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         String jwtToken= jwtUtils.generateTokenFromUsername(userDetails);
-        List <String> roles=userDetails.getAuthorities().stream()
+        List <String> permission=userDetails.getAuthorities().stream()
                             .map(item->item.getAuthority())
                             .toList();
 
-        LoginResponse response=new LoginResponse(jwtToken,userDetails.getUsername(),roles);
+        LoginResponse response=new LoginResponse(jwtToken,userDetails.getUsername(),permission);
 
         return ResponseEntity.ok(response);
 
 
+    }
+
+
+
+    @PostMapping("testuser")
+    public Collection<Permission> getUser(){
+       User user= userDao.findByUsername("testuser").get();
+       Collection<Permission> authorities = (Collection<Permission>) user.getAuthorities();
+       return authorities;
     }
 
 

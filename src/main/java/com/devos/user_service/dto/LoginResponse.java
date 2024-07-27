@@ -5,12 +5,12 @@ import java.util.List;
 public class LoginResponse {
     private String jwtToken;
     private String username;
-    private List<String> roles;
+    private List<String> permissions;
 
-    public LoginResponse(String jwtToken, String username, List<String> roles) {
+    public LoginResponse(String jwtToken, String username, List<String> permissions) {
         this.jwtToken = jwtToken;
         this.username = username;
-        this.roles = roles;
+        this.permissions = permissions;
     }
 
     public String getJwtToken() {
@@ -29,11 +29,11 @@ public class LoginResponse {
         this.username = username;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public List<String> getPermissions() {
+        return permissions;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 }

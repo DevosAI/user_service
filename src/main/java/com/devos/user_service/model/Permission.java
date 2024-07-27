@@ -1,17 +1,20 @@
 package com.devos.user_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name="permissions",schema = "public")
-public class Permission {
+public class Permission implements GrantedAuthority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     private String name;
@@ -92,5 +95,21 @@ public class Permission {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String getAuthority() {
+        return slug;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Permission permission = (Permission) obj;
+        return this.slug == permission.slug;
+    }
+
+    @Override
+    public int hashCode() {
+        return slug.hashCode();
     }
 }

@@ -34,6 +34,7 @@ public class UserService {
         user.setUpdatedBy("1");
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
+        user.setRoles(userRequest.getRoles());
         return userDao.save(user);
     }
 }

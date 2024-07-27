@@ -15,6 +15,7 @@ import com.devos.user_service.service.RoleService;
 import com.devos.user_service.service.ServiceService;
 import com.devos.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
@@ -87,4 +88,9 @@ public class UserController {
         return permission;
     }
 
+    @PreAuthorize("hasAuthority('create_user')")
+    @GetMapping("/service/test")
+    public String Test(){
+        return "test";
+    }
 }

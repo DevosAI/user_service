@@ -1,19 +1,19 @@
-package com.devos.user_service.security;
+package com.devos.user_service.config;
 
+import com.devos.user_service.security.AuthEntryPointJwt;
+import com.devos.user_service.security.AuthTokenFilter;
+import com.devos.user_service.security.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,6 +34,7 @@ public class SecurityConfig {
                 this.userDetailService = userDetailService;
         }
 
+
         @Autowired
         DataSource dataSource;
 
@@ -48,17 +49,22 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(authorizeRequests->authorizeRequests
-                    .requestMatchers("api/v1/auth/*","api/v1/user/*","/error").permitAll()
+                    .requestMatchers(
+                                    "/error",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**",
+                                    "/api/v1/auth/*",
+                                    "/api/v1/user/add"
+                                    ).permitAll()
                     .anyRequest()
                     .authenticated());
+
             http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
             http.exceptionHandling(exception->exception.authenticationEntryPoint(unauthorizedHandler));
-            http.headers(headers->headers.frameOptions(frameOptions->frameOptions.sameOrigin()));
             http.csrf(csrf->csrf.disable());
             http.addFilterBefore(authicationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
             return http.build();
         }
-
         @Bean
         public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
@@ -68,11 +74,5 @@ public class SecurityConfig {
         public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
                 return builder.getAuthenticationManager();
         }
-
-
-
-
-
-
 
 }

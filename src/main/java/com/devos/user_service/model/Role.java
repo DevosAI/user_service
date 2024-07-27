@@ -6,12 +6,14 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name="roles",schema = "public")
-public class Role {
+public class Role  {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
@@ -29,13 +31,18 @@ public class Role {
     private Date updatedAt;
 
     @ManyToMany
-    @JsonIgnoreProperties("permission")
-    private List<Permission> permission = new ArrayList<>();
+    @JsonIgnoreProperties("permissions")
+    private Set<Permission> permissions = new HashSet<Permission>();
 
 
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnoreProperties("users")
-    private List<User> users = new ArrayList<>();
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermission(Set<Permission> permissionss) {
+        this.permissions = permissions;
+    }
 
     public Integer getId() {
         return id;

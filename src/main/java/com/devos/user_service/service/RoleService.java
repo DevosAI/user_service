@@ -26,6 +26,7 @@ public class RoleService {
             if(role.isPresent()) {
                 role.get().setRoleName(roleRequest.getRoleName());
                 role.get().setDescription(roleRequest.getDescription());
+                role.get().setPermission(roleRequest.getPermission());
                 return roleDao.save(role.get());
             }else{
                 throw new RuntimeException("Role not found");
