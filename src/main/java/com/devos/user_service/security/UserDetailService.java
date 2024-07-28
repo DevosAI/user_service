@@ -33,17 +33,9 @@ public class UserDetailService  implements UserDetailsService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("loadUserByUsername");
-        User user = userDao.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not Found"));
-        Collection<Permission> authorities = (Collection<Permission>) user.getAuthorities();
-        System.out.println(authorities);
-        logger.info("loadUserByUsername {}",user);
+        User user = userDao.findByEmailWithRolesAndPermissions(username).orElseThrow(()-> new UsernameNotFoundException("User not Found"));
         return user;
     }
 
-//    private Collection<GrantedAuthority> mapRoles(List<Role> roles) {
-//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//    }
 }

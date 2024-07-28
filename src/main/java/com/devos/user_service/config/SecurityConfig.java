@@ -2,7 +2,7 @@ package com.devos.user_service.config;
 
 import com.devos.user_service.security.AuthEntryPointJwt;
 import com.devos.user_service.security.AuthTokenFilter;
-import com.devos.user_service.security.UserDetailService;
+import com.devos.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,10 +28,10 @@ import javax.sql.DataSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-        private UserDetailService userDetailService;
+        private UserDetailsService userDetailService;
 
         @Autowired
-        public SecurityConfig(UserDetailService userDetailService) {
+        public SecurityConfig(UserDetailsService userDetailService) {
                 this.userDetailService = userDetailService;
         }
 

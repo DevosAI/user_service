@@ -16,6 +16,8 @@ import com.devos.user_service.service.ServiceService;
 import com.devos.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
@@ -90,7 +92,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('create_user')")
     @GetMapping("/service/test")
-    public String Test(){
-        return "test";
+    public Authentication Test(){
+        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+        return auth;
     }
 }
